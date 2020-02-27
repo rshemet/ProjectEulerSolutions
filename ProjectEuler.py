@@ -1,8 +1,4 @@
-prime = 600851475143
-import numpy as np
 import time
-
-
 start = time.time()
 
 #Question3
@@ -24,7 +20,8 @@ def GetFactors(z):
     return factors_list
 
 def GetAnswer3(input):
-    factors = GetFactors(input)
+    prime = 600851475143
+    factors = GetFactors(prime)
     prime_factors = []
     for i in range(0, len(factors)):
         if CheckPrime(factors[i]):
