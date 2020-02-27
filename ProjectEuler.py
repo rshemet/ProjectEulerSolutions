@@ -52,7 +52,7 @@ def DivisibleByRange(x):
     bottom_range = 1
     top_range = 20
     ans = True
-    for i in range(bottom_range, top_range):
+    for i in range(bottom_range, top_range+1):
         if x % i != 0:
             ans = False
             return ans
@@ -356,6 +356,166 @@ def GetAnswer15():
     return binomial_array[2*square_side][square_side]
 
 #Question16
+
+def GetAnswer16():
+    sum = 0
+    for i in (str(2**1000)):
+        sum += int(i)
+    return sum
+
+#Question17
+
+units = {
+    0:'zero',
+    1:'one', 
+    2:'two', 
+    3:'three', 
+    4:'four', 
+    5:'five', 
+    6:'six', 
+    7:'seven', 
+    8:'eight', 
+    9: 'nine'
+}
+
+first_decile = {
+    10: 'ten', 
+    11:'eleven', 
+    12:'twelve', 
+    13:'thirteen', 
+    14:'fourteen', 
+    15:'fifteen',
+    16:'sixteen', 
+    17:'seventeen', 
+    18:'eighteen', 
+    19: 'nineteen'
+}
+
+tens = {
+    2:'twenty', 
+    3:'thirty', 
+    4:'forty', 
+    5:'fifty', 
+    6:'sixty', 
+    7:'seventy',
+    8:'eighty', 
+    9:'ninety'
+}
+
+hundreds = {
+    1:'hundred', 
+  }
+
+thousands = {
+    1: 'thousand'
+}
+
+def NumbersToLetters():
+    numbers_to_letters = []
+    for i in range(1,1001):
+        if len(str(i)) == 1:
+            numbers_to_letters.append(units[int(i)])
+        elif len(str(i)) == 2:
+            if int(i) < 20:
+                numbers_to_letters.append(first_decile[int(i)])
+            else:
+                if str(i)[1] == '0':
+                    numbers_to_letters.append(tens[int(str(i)[0])])
+                else:
+                    numbers_to_letters.append(''.join([tens[int(str(i)[0])],units[int(str(i)[1])]]))
+        elif len(str(i)) == 3:
+            if str(i)[1] == '0' and str(i)[2] == '0':
+                numbers_to_letters.append(''.join([units[int(str(i)[0])],'hundred']))
+            else:
+                if str(i)[1] == '0':
+                    numbers_to_letters.append(''.join([units[int(str(i)[0])],'hundredand',\
+                                                units[int(str(i)[2])]]))
+                elif str(i)[1] == '1':
+                    numbers_to_letters.append(''.join([units[int(str(i)[0])],'hundredand',\
+                                                first_decile[int(str(i)[1:3])]]))
+                else:
+                    if str(i)[2] == '0':
+                        numbers_to_letters.append(''.join([units[int(str(i)[0])],'hundredand',\
+                                                tens[int(str(i)[1])]]))
+                    else:
+                        numbers_to_letters.append(''.join([units[int(str(i)[0])],'hundredand',\
+                                                tens[int(str(i)[1])],units[int(str(i)[2])]]))
+        elif len(str(i)) == 4:
+            numbers_to_letters.append('onethousand')
+    return numbers_to_letters
+
+def GetAnswer17():
+    str_len = 0
+    for i in NumbersToLetters():
+        str_len += len(i)
+    return str_len
+
+#Question18
+
+def GetAnswer18_unfinished():
+
+    triangle =  [['75'],\
+                 ['95 64'],\
+                 ['17 47 82'],\
+                 ['18 35 87 10'],\
+                 ['20 04 82 47 65'],\
+                 ['19 01 23 75 03 34'],\
+                 ['88 02 77 73 07 63 67'],\
+                 ['99 65 04 28 06 16 70 92'],\
+                 ['41 41 26 56 83 40 80 70 33'],\
+                 ['41 48 72 33 47 32 37 16 94 29'],\
+                 ['53 71 44 65 25 43 91 52 97 51 14'],\
+                 ['70 11 33 28 77 73 17 78 39 68 17 57'],\
+                 ['91 71 52 38 17 14 91 43 58 50 27 29 48'],\
+                 ['63 66 04 68 89 53 67 30 73 16 69 87 40 31'],\
+                 ['04 62 98 27 23 09 70 98 73 93 38 53 60 04 23']]
+
+    for i in range(0,len(triangle)):
+        triangle[i] = triangle[i][0].split()
+
+    list_of_moves = [[0,1]]
+    for i in range (1, len(triangle)):
+        list_of_moves.append([])
+        for j in range(0,len(list_of_moves[i-1])+1):
+            if j == 0: 
+                list_of_moves[i].append(''.join([str(list_of_moves[i-1][0]),'0']))
+            elif j == len(list_of_moves[i-1]):
+                list_of_moves[i].append(''.join([str(list_of_moves[i-1][len(list_of_moves[i-1])-1]),'1']))
+            else:
+                pass
+
+#Question52
+
+def CheckSimilarDigits(x,y):
+    list_x = []
+    list_y = []
+    x=str(x)
+    y=str(y)
+    for i in range(0, len(x)):
+        list_x.append(x[i])
+    for i in range(0, len(y)):
+        list_y.append(y[i])
+    while len(list_x)>0:
+        a = list_x[0]
+        list_x.remove(a)
+        try:
+            list_y.remove(a)
+        except ValueError:
+            return False
+    if list_x == [] and list_y == []:
+        return True
+    else:
+        return False
+
+def GetAnswer52():
+    ans = []
+    for i in range(1, 1000000):
+        if CheckSimilarDigits(i, 2*i) and CheckSimilarDigits(i, 3*i) and CheckSimilarDigits(i, 4*i)\
+             and CheckSimilarDigits(i, 5*i) and CheckSimilarDigits(i, 6*i):
+            ans.append(i)
+    return ans[0]
+
+#Question60
 
 
 
