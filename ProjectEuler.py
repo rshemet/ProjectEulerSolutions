@@ -344,10 +344,18 @@ def GetAnswer14():
 #Question15
 
 def GetAnswer15():
-    binomial_array = [[1]]
-    for i in range(1,42):
-        binomial_array.append([i])
+    binomial_array = [[1],[1,1]] # define start of lattice
+    square_side = 20
+    for i in range(2,2*square_side+1):
+        binomial_array.append([])
+        for j in range(0,i+1):
+            if j == 0 or j == i: # check if j is at the 'edge' of the binomial lattice
+                binomial_array[i].append(1)
+            else: # if we are on the inside of the lattice, append appropriate sum
+                binomial_array[i].append(binomial_array[i-1][j-1]+binomial_array[i-1][j])
+    return binomial_array[2*square_side][square_side]
 
+#Question16
 
 
 
