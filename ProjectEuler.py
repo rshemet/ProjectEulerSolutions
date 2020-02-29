@@ -1,4 +1,6 @@
 import time
+import sys
+
 start = time.time()
 
 #Question3
@@ -515,7 +517,130 @@ def GetAnswer52():
             ans.append(i)
     return ans[0]
 
-#Question60
+#Question100
+
+sys.setrecursionlimit(10**6)
+
+def DecomposeIntoFactors(x):
+    list_of_factors = []
+    i = 2
+    while x != 1:
+        if x%i == 0:
+            x = x/i
+            list_of_factors.append(i)
+        else:
+            i += 1
+    return list_of_factors
+
+def DecomposeIntoFactorsRecursive(x, array, startfactor):
+    if x != 1:
+        if x%startfactor == 0:
+            array.append(startfactor)
+            DecomposeIntoFactorsRecursive(x/startfactor, array, startfactor)
+        else:
+            DecomposeIntoFactorsRecursive(x, array, startfactor+1)
+    return array
+
+def CheckProbHalf(blues, total):
+    numerator = DecomposeIntoFactors(blues) + DecomposeIntoFactors(blues -1)
+    denominator = DecomposeIntoFactors(total) + DecomposeIntoFactors(total - 1)
+    for i in range(0, len(numerator)):
+        popvalue = max(numerator)
+        numerator.remove(popvalue)
+        try:
+            denominator.remove(popvalue)
+        except ValueError:
+            return False
+    if denominator == [2]:
+        return True
+    else:
+        return False
+
+def FindBlueDiscs():
+    # Redundant function, too slow for large numbers
+    start_range = 4000
+    end_range = 30000
+    lower_bound_search = 0.70689
+    upper_bound_search = 0.7073
+    disc_tuples = []
+    for i in range(start_range, end_range):
+        if i % 1000 == 0:
+            print('On iteration: ', i)
+        if CheckPrime(i) or CheckPrime(i-1):
+            pass
+        else:
+            for j in range(int(i*lower_bound_search), int(i*upper_bound_search)+1):
+                if CheckPrime(j) or CheckPrime(j-1):
+                    pass
+                else:
+                    if CheckProbHalf(j, i):
+                        disc_tuples.append([j, i])
+                        lower_bound_search = (j-1)/(i-1)
+                        upper_bound_search = j/i
+                        print('Found new pair: ', [j, i], '; bounds narrowed to ', [lower_bound_search, upper_bound_search])
+    return disc_tuples
+
+def GenPrimes(x):
+    list_of_primes = []
+    for i in range(2,x):
+        if CheckPrime(i):
+            list_of_primes.append(i)
+    return list_of_primes
+
+def FindBlueDiscsNew():
+    #start_range = 1000
+    #end_range = 10000
+    multiplier = 5.7
+    tuples = [[493,697]]
+    i = 1000
+
+    while i<10**8:
+
+        if i % 1000 == 0:
+            print('Iteration: ', i)
+
+        if CheckPrime(i) or CheckPrime(i-1):
+            i+=1
+        else:
+            #num1 = DecomposeIntoFactors(i)
+            #num2 = DecomposeIntoFactors(i-1)
+            #numerator = num1 + num2
+            #den_prod = 2
+
+            #for j in numerator:
+            #    den_prod *= j
+            
+            total_test = int((i*(i-1)*2)**0.5)+1
+
+            if CheckPrime(total_test-1):
+                i+=1
+            else:
+                if CheckProbHalf(i,total_test):
+                    print('Found tuple: ', [i, total_test])
+                    tuples.append([i, total_test])
+                    if len(tuples) == 1:
+                        i = int(i*multiplier)
+                    else:
+                        multiplier = tuples[len(tuples)-1][0]/tuples[len(tuples)-2][0]
+                        i = int(i*multiplier)
+                else:
+                    i += 1
+    return tuples
+
+print(FindBlueDiscsNew())
+
+#results = [[3,4],[15,21],[85,120],[493,697],[2871,4060],[16731,23661], [97513, 137904], [568345, 803761],  [3312555, 4684660], [19306983, 27304197], [112529341, 159140520]]
+#
+#for i in results:
+#    j = i[0]
+#    k = i[1]
+#    print('For ', j, ' of ', k, " :\n")
+#    print(DecomposeIntoFactors(i[0]), ' ---AND--- ', DecomposeIntoFactors(i[0]-1))
+#    print(DecomposeIntoFactors(i[1]), ' ---AND--- ', DecomposeIntoFactors(i[1]-1), '\n')
+#
+#for i in range(1, len(results)):
+#    print('Ratio of blues = ', results[i][0]/results[i-1][0])
+#    print('Ratio of totals = ', results[i][1]/results[i-1][1], '\n')
 
 
 
