@@ -1,5 +1,6 @@
 import time
 import sys
+from matplotlib import pyplot as plt
 
 start = time.time()
 
@@ -542,8 +543,8 @@ def DecomposeIntoFactorsRecursive(x, array, startfactor):
     return array
 
 def CheckProbHalf(blues, total):
-    numerator = DecomposeIntoFactors(blues) + DecomposeIntoFactors(blues -1)
-    denominator = DecomposeIntoFactors(total) + DecomposeIntoFactors(total - 1)
+    numerator = DecomposeIntoFactors(blues * (blues -1))
+    denominator = DecomposeIntoFactors(total * (total - 1))
     for i in range(0, len(numerator)):
         popvalue = max(numerator)
         numerator.remove(popvalue)
@@ -552,6 +553,26 @@ def CheckProbHalf(blues, total):
         except ValueError:
             return False
     if denominator == [2]:
+        return True
+    else:
+        return False
+
+def CheckProbHalfNew(blues, total):
+    list_of_factors = []
+    i = 2
+    num = blues * (blues - 1)
+    den = total * (total - 1)
+    while num != 1:
+        if num%i == 0:
+            if den%i != 0:
+                return False
+            else:
+                num = num/i
+                den = den/i
+                list_of_factors.append(i)
+        else:
+            i += 1
+    if num == 1 and den == 2:
         return True
     else:
         return False
@@ -593,44 +614,61 @@ def FindBlueDiscsNew():
     multiplier = 5.7
     tuples = [[493,697]]
     i = 1000
+    miss = 0
 
-    while i<10**8:
+    while i<10**12:
 
-        if i % 1000 == 0:
-            print('Iteration: ', i)
+        print('Checking number ', i, '...')
 
-        if CheckPrime(i) or CheckPrime(i-1):
-            i+=1
-        else:
-            #num1 = DecomposeIntoFactors(i)
-            #num2 = DecomposeIntoFactors(i-1)
-            #numerator = num1 + num2
-            #den_prod = 2
+        #num1 = DecomposeIntoFactors(i)
+        #num2 = DecomposeIntoFactors(i-1)
+        #numerator = num1 + num2
+        #den_prod = 2
+        #for j in numerator:
+        #    den_prod *= j
 
-            #for j in numerator:
-            #    den_prod *= j
-            
-            total_test = int((i*(i-1)*2)**0.5)+1
+        total_test = int((i*(i-1)*2)**0.5)+1
 
-            if CheckPrime(total_test-1):
-                i+=1
+        if CheckProbHalfNew(i,total_test):
+            print('\nFound tuple: ', [i, total_test])
+            tuples.append([i, total_test])
+            if len(tuples) == 1:
+                i = int(i*multiplier)
+                miss = 0
             else:
-                if CheckProbHalf(i,total_test):
-                    print('Found tuple: ', [i, total_test])
-                    tuples.append([i, total_test])
-                    if len(tuples) == 1:
-                        i = int(i*multiplier)
-                    else:
-                        multiplier = tuples[len(tuples)-1][0]/tuples[len(tuples)-2][0]
-                        i = int(i*multiplier)
-                else:
-                    i += 1
+                multiplier = tuples[len(tuples)-1][0]/tuples[len(tuples)-2][0]
+                print('Multiplier missed next true value by ', miss)
+                print('Multiplier increased to: ', multiplier)
+                print('Jumping to iteration ', int(i*multiplier))
+                stop = time.time()
+                print("\nTime elapsed: ", stop - start, " sec.")
+                i = int(i*multiplier) + 12
+                miss = 0
+        else:
+            i += 1
+            miss += 1
+
     return tuples
 
-print(FindBlueDiscsNew())
+def GetAnswer100():
 
-#results = [[3,4],[15,21],[85,120],[493,697],[2871,4060],[16731,23661], [97513, 137904], [568345, 803761],  [3312555, 4684660], [19306983, 27304197], [112529341, 159140520]]
-#
+    # Method of solving this problem (after many, many attempts) came by discovering that
+    # every next 'blues number' can be calculated as 'current blues'/'previous blues' + 12
+
+    results = [[3,4],[15,21],[85,120],[493,697],[2871,4060],[16731,23661], [97513, 137904], [568345, 803761],  [3312555, 4684660], [19306983, 27304197], [112529341, 159140520], [655869061, 927538921],[3822685023, 5406093004], [22280241075, 31509019101]]
+
+    start_list = [[493,697],[2871,4060]]
+
+    for i in range(1, len(start_list)+10):
+        mutliplier = start_list[i][0] / start_list[i-1][0]
+        next_blue = int(start_list[i][0] * mutliplier) + 12
+        next_total = int((next_blue*(next_blue-1)*2)**0.5+1)
+        start_list.append([next_blue, next_total])
+
+    return(start_list[len(start_list)-1][0])
+
+
+
 #for i in results:
 #    j = i[0]
 #    k = i[1]
@@ -638,10 +676,21 @@ print(FindBlueDiscsNew())
 #    print(DecomposeIntoFactors(i[0]), ' ---AND--- ', DecomposeIntoFactors(i[0]-1))
 #    print(DecomposeIntoFactors(i[1]), ' ---AND--- ', DecomposeIntoFactors(i[1]-1), '\n')
 #
+#ratio_of_blues = []
+#ratio_of_totals =[]
 #for i in range(1, len(results)):
 #    print('Ratio of blues = ', results[i][0]/results[i-1][0])
+#    ratio_of_blues.append(results[i][0]/results[i-1][0])
 #    print('Ratio of totals = ', results[i][1]/results[i-1][1], '\n')
+#    ratio_of_totals.append(results[i][1]/results[i-1][1])
 
+
+#plt.plot(ratio_of_blues, label = 'Ratio of Blues', linewidth = 1)
+#plt.plot(ratio_of_totals, label = 'Ratio of Totals', linewidth = 1)
+#plt.legend()
+#plt.show()
+
+#FindBlueDiscsNew()
 
 
 stop = time.time()
