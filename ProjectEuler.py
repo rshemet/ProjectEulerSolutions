@@ -669,29 +669,5 @@ def GetAnswer100():
 
 
 
-#for i in results:
-#    j = i[0]
-#    k = i[1]
-#    print('For ', j, ' of ', k, " :\n")
-#    print(DecomposeIntoFactors(i[0]), ' ---AND--- ', DecomposeIntoFactors(i[0]-1))
-#    print(DecomposeIntoFactors(i[1]), ' ---AND--- ', DecomposeIntoFactors(i[1]-1), '\n')
-#
-#ratio_of_blues = []
-#ratio_of_totals =[]
-#for i in range(1, len(results)):
-#    print('Ratio of blues = ', results[i][0]/results[i-1][0])
-#    ratio_of_blues.append(results[i][0]/results[i-1][0])
-#    print('Ratio of totals = ', results[i][1]/results[i-1][1], '\n')
-#    ratio_of_totals.append(results[i][1]/results[i-1][1])
-
-
-#plt.plot(ratio_of_blues, label = 'Ratio of Blues', linewidth = 1)
-#plt.plot(ratio_of_totals, label = 'Ratio of Totals', linewidth = 1)
-#plt.legend()
-#plt.show()
-
-#FindBlueDiscsNew()
-
-
 stop = time.time()
 print("\nTime elapsed: ", stop - start, " sec. \n")
