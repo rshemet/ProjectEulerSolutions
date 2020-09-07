@@ -519,6 +519,28 @@ def GetAnswer21():
             sum_res += i[0] + i[1]
     return sum_res/2
 
+#Question25
+
+sys.setrecursionlimit(10**9)
+
+fibDict = {1:1, 2:1}
+def GenFib(int):
+    if int in fibDict.keys():
+        return fibDict[int]
+    else:
+        fibDict[int] = GenFib(int-1) + GenFib(int-2)
+        return fibDict[int]
+
+def GetAnswer25():
+    n=1
+    fibNum = 0
+
+    while len(str(fibNum))<1000:
+        fibNum = GenFib(n)
+        n+=1
+
+    return list(fibDict)[-1]
+
 #Question52
 
 def CheckSimilarDigits(x,y):
